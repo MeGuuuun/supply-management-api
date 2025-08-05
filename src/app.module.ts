@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SupplyModule } from "./supply/supply.module";
 import { CategoryModule } from "./category/category.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {CommonModule } from "./common/common.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           synchronize: true,
           logging: true,     // 쿼리 로그 확인용
       }),
+      CommonModule,
       SupplyModule,
       CategoryModule,
   ],
