@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany} from 'typeorm';
+import { Supply } from "../supply/supply.entity";
 
 @Entity({ name: 'category'})
 export class Category {
@@ -10,4 +11,8 @@ export class Category {
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
+
+    // 하나의 카테고리에 여러개의 비품
+    @OneToMany(()=> Supply, supply=> supply.category)
+    supply: Supply;
 }
