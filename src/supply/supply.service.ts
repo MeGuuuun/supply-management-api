@@ -13,9 +13,6 @@ export class SupplyService {
 
     async addSupply(supplyRequestDto: SupplyRequestDto): Promise<Supply> {
         const newSupply = this.supplyRepository.create(supplyRequestDto); // 엔티티 인스턴스 생성
-        console.log("Saving new supply:", newSupply);  // 저장 전에 찍기
-        const savedSupply = await this.supplyRepository.save(newSupply); // DB에 저장
-        console.log("Saved supply:", savedSupply);  // 저장 후 찍기
-        return savedSupply;
+        return await this.supplyRepository.save(newSupply); // DB에 저장
     }
 }

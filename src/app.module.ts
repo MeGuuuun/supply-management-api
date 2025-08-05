@@ -15,7 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           password: '1234',
           database: 'supply_management',
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          synchronize: true,        // 개발 중에는 true, 배포 시엔 false
+          synchronize: true,
           logging: true,     // 쿼리 로그 확인용
       }),
       SupplyModule,
