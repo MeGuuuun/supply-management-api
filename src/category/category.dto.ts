@@ -1,5 +1,5 @@
 export class CategoryRequestDto {
-    readonly name: string;
+    name: string;
 }
 
 export class CategoryResponseDto {
