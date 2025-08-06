@@ -1,8 +1,8 @@
-import {Controller, Get, Post, Body, Param, Query} from '@nestjs/common';
+import {Controller, Get, Post, Body, Param, Query, Patch} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { SupplyService } from './supply.service';
-import { SupplyRequestDto } from "./supply.dto";
+import {SupplyRequestDto, SupplyResponseDto} from "./supply.dto";
 import { Supply } from "./supply.entity";
 
 @ApiTags("비품 API")
@@ -34,6 +34,8 @@ export class SupplyController {
     }
 
     // 특정 비품 상세 조회
+    @ApiParam({name: 'supplyId', description:'비품 id'})
+    @ApiOperation({summary: '특정 비품 상세 조회'})
     @Get(':supplyId')
     async getSupplyInfo(
         @Param('supplyId') id: string
@@ -41,6 +43,15 @@ export class SupplyController {
         return this.supplyService.getSupplyInfo(id);
     }
 
-
     // 특정 비품 정보 수정
+    @ApiParam({name: 'supplyId', description:'비품 id'})
+    @ApiOperation({summary: '특정 비품 정보 수정'})
+    @Patch(':supplyId')
+    async updateSupply(
+        @Param('supplyId') id:string,
+        @Body() supplyRequestDto: SupplyRequestDto
+    ){
+        return this.supplyService.updateSupply(id, supplyRequestDto);
+    }
+
 }

@@ -39,7 +39,7 @@ export class SupplyService {
         }
     }
 
-    async getSupplyInfo(id: string){
+    async getSupplyInfo(id: string): Promise<SupplyResponseDto>{
         const supply = await this.supplyRepository.findOne({
             where: {
                 categoryId: id
@@ -48,5 +48,18 @@ export class SupplyService {
 
         return new SupplyResponseDto(supply);
 
+    }
+
+    async updateSupply(id:string, supplyRequestDto: SupplyRequestDto):Promise<Supply>{
+        const supply = await this.supplyRepository.findOneBy({supply_id:id});
+
+        // 예외 처리
+        if(!supply){
+            console.log("찾으려는 비품 없음");
+        }
+
+        Object.assign(supply, supplyRequestDto);
+
+        return await this.supplyRepository.save(supply)
     }
 }
