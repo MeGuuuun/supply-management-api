@@ -15,6 +15,6 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);  // Swagger UI를 /api 경로에 띄움
 
-    await app.listen(3000);
+    await app.listen(3000, '0.0.0.0');
 }
 bootstrap();
