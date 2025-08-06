@@ -38,4 +38,15 @@ export class SupplyService {
             limit
         }
     }
+
+    async getSupplyInfo(id: string){
+        const supply = await this.supplyRepository.findOne({
+            where: {
+                categoryId: id
+            }
+        })
+
+        return new SupplyResponseDto(supply);
+
+    }
 }

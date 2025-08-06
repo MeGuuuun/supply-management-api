@@ -24,7 +24,7 @@ export class SupplyController {
     @ApiQuery({ name: 'page', description: '페이지 번호' })
     @ApiQuery({ name: 'limit', description: '한 페이지에 보여줄 항목 수' })
     @ApiOperation({ summary: '특정 카테고리에 속한 비품 조회' })
-    @Get(':categoryId')
+    @Get('/by-category/:categoryId')
     async getSuppliesByCategory(
         @Param('categoryId') id: string,
         @Query('page') page = 1,
@@ -34,6 +34,13 @@ export class SupplyController {
     }
 
     // 특정 비품 상세 조회
+    @Get(':supplyId')
+    async getSupplyInfo(
+        @Param('supplyId') id: string
+    ) {
+        return this.supplyService.getSupplyInfo(id);
+    }
+
 
     // 특정 비품 정보 수정
 }
