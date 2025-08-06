@@ -13,10 +13,14 @@ CREATE table if not exists supply (
     quantity int,
     status varchar DEFAULT '사용 가능',
     createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    category_id UUID,
     Foreign Key (category_id) references category(category_id)
 );
 
 -- 초기 데이터 삽입
+INSERT INTO category VALUES (uuid_generate_v4(), '학용품');
+INSERT INTO category VALUES (uuid_generate_v4(), '욕실용품');
+
 INSERT INTO supply (supply_id, name, quantity, category_id)
 VALUES (uuid_generate_v4(), '연필', 10, (SELECT category_id FROM category WHERE name='학용품' LIMIT 1));
 
