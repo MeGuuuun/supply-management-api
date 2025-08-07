@@ -20,15 +20,15 @@ export class Supply {
     })
     status: SupplyStatus;
 
-    @CreateDateColumn({ type: 'timestamp' })
+    @CreateDateColumn({ type: 'timestamp' , name: 'createdat'})
     createdAt: Date;
 
     // 여러개의 비품이 하나의 카테고리 안에 속함
-    @ManyToOne(() => Category, category => category.supply, {eager: true})
+    @ManyToOne(() => Category, (category) => category.supply)
     @JoinColumn({name: 'category_id'})
     category: Category;
 
     // FK 설정
-    @Column('uuid')
-    categoryId: string;
+    @Column({name: 'category_id'})
+    category_id: string;
 }

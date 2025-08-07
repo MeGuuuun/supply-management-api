@@ -8,7 +8,7 @@ export class SupplyRequestDto {
     quantity: number;
 
     @ApiProperty({ example: 'uid', description: '카테고리 id'})
-    categoryId: string;
+    category_id: string;
 }
 
 export class SupplyResponseDto {
@@ -25,13 +25,13 @@ export class SupplyResponseDto {
     status: string;
 
     @ApiProperty({ example: 'uid', description: '카테고리 id'})
-    categoryId: string;
+    category_id: string;
 
     constructor(supply: Partial<SupplyResponseDto>) {
         this.supply_id = supply.supply_id;
         this.name = supply.name;
         this.quantity = supply.quantity;
         this.status = supply.status;
-        this.categoryId = supply.categoryId;
+        this.category_id = supply.category_id;
     }
 }

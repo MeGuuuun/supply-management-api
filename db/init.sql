@@ -7,6 +7,9 @@ CREATE table if not exists category (
     createdAt timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO category VALUES (uuid_generate_v4(), '학용품');
+INSERT INTO category VALUES (uuid_generate_v4(), '욕실용품');
+
 CREATE table if not exists supply (
     supply_id UUID primary key,
     name varchar,
@@ -16,10 +19,6 @@ CREATE table if not exists supply (
     category_id UUID,
     Foreign Key (category_id) references category(category_id)
 );
-
--- 초기 데이터 삽입
-INSERT INTO category VALUES (uuid_generate_v4(), '학용품');
-INSERT INTO category VALUES (uuid_generate_v4(), '욕실용품');
 
 INSERT INTO supply (supply_id, name, quantity, category_id)
 VALUES (uuid_generate_v4(), '연필', 10, (SELECT category_id FROM category WHERE name='학용품' LIMIT 1));

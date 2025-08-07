@@ -18,6 +18,11 @@ export class SupplyController {
     }
 
     // 전체 비품 목록 조회(Redis 사용)
+    @Get()
+    async getAllSupplies(): Promise<Supply[]> {
+        console.log("controller 실행")
+        return this.supplyService.findAll();
+    }
 
     // 특정 카테고리에 속한 비품 조회
     @ApiParam({name: 'categoryId', description: '카테고리 id'})
