@@ -26,17 +26,22 @@ export class SupplyService {
 
     async findAll(): Promise<Supply[]> {
         const cacheKey = 'supply_all';
-        const cached = await this.cacheManager.get<Supply[]>(cacheKey);
-        if (cached !== undefined && cached !== null) {
+        const cached = await this.cacheManager.get<string>(cacheKey);
+        console.log(cached)
+        if (cached) {
             console.log('캐시에서 불러옴');
-            return cached;
+            return JSON.parse(cached);
         }
 
         const supplies = await this.supplyRepository.find();
 
+        const suppliesStringified = JSON.stringify(supplies);
 
+        await this.cacheManager.set(cacheKey, suppliesStringified, 60000);
 
-        await this.cacheManager.set(cacheKey, supplies, 60);
+        const testCache = await this.cacheManager.get<string>(cacheKey);  // 캐시 상태 확인
+
+        console.log('캐시 저장 확인:', testCache);
 
         console.log("DB에서 불러와 캐시 저장");
         return supplies;
