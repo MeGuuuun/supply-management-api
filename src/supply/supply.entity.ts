@@ -1,5 +1,4 @@
 import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn, ManyToOne} from 'typeorm';
-import { SupplyStatus } from "./supply-status.enum";
 import { Category } from "../category/category.entity";
 
 @Entity({ name: 'supply'})
@@ -14,13 +13,10 @@ export class Supply {
     quantity: number;
 
     @Column({
-        type: 'enum',
-        enum: SupplyStatus,
-        default: SupplyStatus.AVAILABLE
     })
-    status: SupplyStatus;
+    status: string;
 
-    @CreateDateColumn({ type: 'timestamp' , name: 'createdat'})
+    @CreateDateColumn({ type: 'timestamp' , name: 'created_at'})
     createdAt: Date;
 
     // 여러개의 비품이 하나의 카테고리 안에 속함

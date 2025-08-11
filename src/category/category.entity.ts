@@ -9,7 +9,7 @@ export class Category {
     @Column('varchar')
     name: string;
 
-    @CreateDateColumn({ type: 'timestamp', name: 'createdat' })
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 
     // 하나의 카테고리에 여러개의 비품
