@@ -21,7 +21,7 @@ import { CacheModule } from '@nestjs/cache-manager';
               store: redisStore as any,
               host: 'redis',
               port: 6379,
-              ttl: 60
+              ttl: 60000
           })
       }),
       TypeOrmModule.forRootAsync({

@@ -24,28 +24,35 @@ export class SupplyService {
         return await this.supplyRepository.save(newSupply); // DB에 저장
     }
 
-    async findAll(): Promise<Supply[]> {
-        const cacheKey = 'supply_all';
+    async findAll(pagination: { page: number; limit: number }): Promise<{ data: Supply[]; total: number; page: number; limit: number }> {
+        const { page, limit } = pagination;
+
+        const cacheKey = `supply_all_page_${page}_limit_${limit}`;
         const cached = await this.cacheManager.get<string>(cacheKey);
-        console.log(cached)
+
         if (cached) {
             console.log('캐시에서 불러옴');
             return JSON.parse(cached);
         }
 
-        const supplies = await this.supplyRepository.find();
+        const [supplies, total] = await this.supplyRepository.findAndCount({
+            skip: (page - 1) * limit,
+            take: limit,
+        });
 
-        const suppliesStringified = JSON.stringify(supplies);
+        const result = {
+            data: supplies,
+            total,
+            page,
+            limit,
+        };
 
-        await this.cacheManager.set(cacheKey, suppliesStringified, 60000);
+        await this.cacheManager.set(cacheKey, JSON.stringify(result), 60); // TTL 60초
 
-        const testCache = await this.cacheManager.get<string>(cacheKey);  // 캐시 상태 확인
-
-        console.log('캐시 저장 확인:', testCache);
-
-        console.log("DB에서 불러와 캐시 저장");
-        return supplies;
+        console.log('DB에서 불러와 캐시 저장');
+        return result;
     }
+
 
     async getSuppliesByCategory(id:string, pagination: {page:number; limit:number}): Promise<{data: SupplyResponseDto[]; total: number; page: number; limit:number}> {
         const {page, limit } = pagination;
