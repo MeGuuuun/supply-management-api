@@ -18,6 +18,9 @@ export class SupplyController {
     }
 
     // 전체 비품 목록 조회(Redis 사용)
+    @ApiOperation({ summary: '전체 비품 조회' })
+    @ApiQuery({ name: 'page', description: '페이지 번호' })
+    @ApiQuery({ name: 'limit', description: '한 페이지에 보여줄 항목 수' })
     @Get()
     async getAllSupplies(
         @Query('page') page = 1,

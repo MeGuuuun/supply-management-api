@@ -1,7 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {Category} from "./category.entity";
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CategoryRequestDto {
+    @IsNotEmpty()
+    @IsString()
     @ApiProperty({ example: '학용품', description: '카테고리 이름'})
     name: string;
 }

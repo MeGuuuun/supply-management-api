@@ -1,10 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, IsNumber, Min } from 'class-validator';
 
 export class SupplyRequestDto {
     @ApiProperty({ example: '연필', description: '비품 이름'})
+    @IsNotEmpty()
+    @IsString()
     name: string;
 
     @ApiProperty({ example: 10 , description: '비품 수량'})
+    @IsNotEmpty()
+    @IsNumber()
+    @Min(0)
     quantity: number;
 
     @ApiProperty({ example: 'uid', description: '카테고리 id'})
