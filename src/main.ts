@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './common/exception.fiilter';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -22,6 +23,9 @@ async function bootstrap() {
             transform: true,            // 요청 데이터를 DTO 객체로 변환
         })
     );
+
+    // 전역 예외 필터 등록
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.listen(3000, '0.0.0.0');
 }
