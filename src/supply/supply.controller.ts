@@ -81,4 +81,14 @@ export class SupplyController {
         return this.supplyService.returnSupply(id);
     }
 
+    // 특정 비품의 반납/대여 이력 조회
+    @Get('/rent')
+    async getRentHistory(
+        @Query('page') page = 1,
+        @Query('limit') limit = 10,
+        @Param('supplyId') id:string
+    ){
+        return this.supplyService.getRentHistory({page, limit}, id)
+    }
+
 }

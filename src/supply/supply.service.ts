@@ -219,4 +219,33 @@ export class SupplyService {
         }
 
     }
+
+    // 비품의 반납/대여 이력 조회
+    async getRentHistory(pagination: {page:number; limit:number}, id:string):Promise<{ data: Rent[]; total: number; page: number; limit: number }> {
+        const {page, limit } = pagination;
+
+        try {
+            const [rents, total] = await this.rentRepository.findAndCount({
+                where: {supply_id: id},
+                skip: (page - 1) * limit,
+                take: limit,
+            })
+
+            if(!rents || rents.length === 0){
+                throw new NotFoundException('비품을 찾을 수 없습니다.');
+            }
+
+            const result = {
+                data: rents,
+                total,
+                page,
+                limit,
+            };
+
+            return result;
+        }catch(error){
+            console.error("InternalServerErrorException 발생")
+            throw new InternalServerErrorException('비품 반납/대여 이력 조회에 에러가 발생했습니다.');
+        }
+    }
 }

@@ -60,3 +60,7 @@ export class RentRequestDto {
     @ApiProperty({ example: "대여 중", description: '대여할 비품의 상태'})
     status:string;
 }
+
+export class RentResponseDto {
+
+}
