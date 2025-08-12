@@ -11,7 +11,7 @@
 
 ## 🪄 주요 기능
 
-+ 필수 기능
++ ### 필수 기능
 
   **카테고리 관리 API**
     - [x] 새 카테고리 등록
@@ -26,7 +26,9 @@
     - [x] 특정 비품 상세 정보 조회
     - [x] 특정 비품 정보 수정
 
- + 심화 기능
+<br>
+
+ + ### 심화 기능
 
    **사용자 관리 API**
     - [x] 간단한 사용자(직원) 모델 추가 (직원ID, 이름)
@@ -46,7 +48,25 @@
 
 ## 📚 API 명세서
 
+### [POSTMAN DOCS](https://documenter.getpostman.com/view/14476064/2sB3BGFULw)
+
 <br>
 
 ## 🧩ERD
 <img width="913" height="555" alt="Image" src="https://github.com/user-attachments/assets/69c93411-cf4a-4740-b0eb-32ed390ef785" />
+
+<br>
+
+## ✏️ 프로젝트 실행 방법
+
+### 1. 프로젝트 클론
+
+   ```bash
+  git clone https://github.com/MeGuuuun/supply-management-api.git
+   ```
+### 2. docker compose 명령어 실행
+
+   ```bash
+    docker-compose up --build -d
+   ```
+<br>
