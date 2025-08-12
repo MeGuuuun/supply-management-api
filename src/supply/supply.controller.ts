@@ -66,11 +66,19 @@ export class SupplyController {
     }
 
     // 특정 비품 대여
-    @Post('rent')
+    @Post('/rent')
     async rentSupply(
         @Body() rentRequestDto: RentRequestDto
     ):Promise<Rent>{
         return this.supplyService.rentSupply(rentRequestDto);
+    }
+
+    // 특정 비품 반납
+    @Post('/return')
+    async returnSupply(
+        @Param('rentId') id:string
+    ){
+        return this.supplyService.returnSupply(id);
     }
 
 }

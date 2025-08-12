@@ -7,8 +7,8 @@ import { SupplyResponseDto } from "./supply.dto";
 
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import {RentStatus, SupplyStatus} from "./supply-status.constants";
 import {Rent} from "./rent.entity";
+import {SupplyStatus} from "./supply-status.constants";
 
 @Injectable()
 export class SupplyService {
@@ -166,7 +166,7 @@ export class SupplyService {
 
             // 비품 개수 차감 및 상태 변경
             supply.quantity -= rentRequestDto.quantity;
-            rentRequestDto.status = RentStatus.RENTED;
+            rentRequestDto.status = SupplyStatus.RENTED;
 
             await this.supplyRepository.save(supply);
 
@@ -207,7 +207,7 @@ export class SupplyService {
             supply.quantity += rent.quantity;
             await this.supplyRepository.save(supply);
 
-            rent.status = RentStatus.RETURNED;
+            rent.status = SupplyStatus.RETURNED;
             await this.rentRepository.save(rent);
 
             return rent;
@@ -215,7 +215,7 @@ export class SupplyService {
 
         }catch(error){
             console.error("InternalServerErrorException 발생")
-            throw new InternalServerErrorException('비품 대여에 에러가 발생했습니다.');
+            throw new InternalServerErrorException('비품 반납에 에러가 발생했습니다.');
         }
 
     }
