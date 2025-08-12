@@ -1,6 +1,3 @@
-### 비품관리 API 구축
-<br>
-
 ## 🎯 프로젝트 목표
 - Restful API 설계 및 개발 능력 함양
 - 데이터베이스 관계 설정 및 ORM 사용 경험
@@ -53,7 +50,7 @@
 <br>
 
 ## 🧩ERD
-<img width="913" height="555" alt="Image" src="https://github.com/user-attachments/assets/69c93411-cf4a-4740-b0eb-32ed390ef785" />
+<img width="1826" height="1110" alt="Image" src="https://github.com/user-attachments/assets/7263ab69-164b-49c6-a37a-e43d3d93c9b6" />
 
 <br>
 
