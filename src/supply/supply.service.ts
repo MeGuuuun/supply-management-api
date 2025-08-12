@@ -1,18 +1,23 @@
-import {Inject, Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
+import {BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Supply } from './supply.entity';
-import { SupplyRequestDto } from "./supply.dto";
+import {RentRequestDto, SupplyRequestDto} from "./supply.dto";
 import { SupplyResponseDto } from "./supply.dto";
 
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import {RentStatus, SupplyStatus} from "./supply-status.constants";
+import {Rent} from "./rent.entity";
 
 @Injectable()
 export class SupplyService {
     constructor(
         @InjectRepository(Supply)
         private readonly supplyRepository: Repository<Supply>,
+
+        @InjectRepository(Rent)
+        private readonly rentRepository: Repository<Rent>,
 
         @Inject(CACHE_MANAGER)
         private readonly cacheManager: Cache,
@@ -108,12 +113,8 @@ export class SupplyService {
         try{
             const supply = await this.supplyRepository.findOne({
                 where: {
-                    category: {
-                        category_id: id
-                    }
-                },
-                relations: ['category']
-            });
+                    supply_id:id
+            }});
 
             if(!supply){
                 throw new NotFoundException(`비품 ID :  ${id}의 정보를 찾을 수 없습니다. `);
@@ -141,8 +142,81 @@ export class SupplyService {
             console.error("InternalServerErrorException 발생")
             throw new InternalServerErrorException('비품 갱신에 에러가 발생했습니다.');
         }
+    }
+
+    // 비품 대여
+    async rentSupply(rentRequestDto: RentRequestDto){
+        try {
+            // 대여할 아이템 존재 확인
+            const s_id = rentRequestDto.supply_id;
+            const supply = await this.supplyRepository.findOne({
+                where: {
+                    supply_id:s_id
+                }
+            });
+
+            if(!supply){
+                throw new NotFoundException('대여하려는 비품을 찾을 수 없습니다.');
+            }
+
+            // 갯수 비교를 통해 대여할 수 있는지 확인
+            if(supply.quantity < rentRequestDto.quantity){
+                throw new BadRequestException('대여하려는 비품의 갯수가 초과합니다.');
+            }
+
+            // 비품 개수 차감 및 상태 변경
+            supply.quantity -= rentRequestDto.quantity;
+            rentRequestDto.status = RentStatus.RENTED;
+
+            await this.supplyRepository.save(supply);
+
+            // 대여 기록 저장
+            const rent = this.rentRepository.create(rentRequestDto);
+            return await this.rentRepository.save(rent);
+        }catch(error){
+            console.error("InternalServerErrorException 발생")
+            throw new InternalServerErrorException('비품 대여에 에러가 발생했습니다.');
+        }
+    }
+
+    // 비품 반납
+    async returnSupply(id:string){
+        try {
+            // 반납하려는 비품의 대여 기록 확인
+            const rent = await this.rentRepository.findOne({
+                where: {
+                    rent_id:id
+                }
+            })
+
+            if(!rent){
+                throw new NotFoundException('반납하려는 비품의 대여 기록을 찾을 수 없습니다.');
+            }
+
+            // 대여 개수 원상복귀
+            const supply = await this.supplyRepository.findOne({
+                where: {
+                    supply_id: rent.supply_id
+                }
+            })
+
+            if(!supply){
+                throw new NotFoundException('반납 하려는 비품을 찾을 수 없습니다.');
+            }
+
+            supply.quantity += rent.quantity;
+            await this.supplyRepository.save(supply);
+
+            rent.status = RentStatus.RETURNED;
+            await this.rentRepository.save(rent);
+
+            return rent;
 
 
+        }catch(error){
+            console.error("InternalServerErrorException 발생")
+            throw new InternalServerErrorException('비품 대여에 에러가 발생했습니다.');
+        }
 
     }
 }

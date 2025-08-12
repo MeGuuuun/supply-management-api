@@ -41,3 +41,29 @@ export class SupplyResponseDto {
         this.category_id = supply.category_id;
     }
 }
+
+export class RentRequestDto {
+    @ApiProperty({ example: 'uuid' , description: '비품 ID'})
+    @IsNotEmpty()
+    supply_id: string;
+
+    @ApiProperty({ example: 'uuid' , description: '사용자 ID'})
+    @IsNotEmpty()
+    user_id:string;
+
+    @ApiProperty({ example: 2 , description: '대여할 비품의 수량'})
+    @IsNotEmpty()
+    @IsNumber()
+    @Min(1)
+    quantity: number;
+
+    @ApiProperty({ example: "대여 중", description: '대여할 비품의 상태'})
+    @IsNotEmpty()
+    status:string;
+}
+
+export class ReturnRequestDto {
+    @ApiProperty({ example: "uuid", description: '대여 ID'})
+    @IsNotEmpty()
+    rent_id: string;
+}

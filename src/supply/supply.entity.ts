@@ -9,11 +9,10 @@ export class Supply {
     @Column('varchar')
     name: string;
 
-    @Column('bigint')
+    @Column('integer')
     quantity: number;
 
-    @Column({
-    })
+    @Column('varchar')
     status: string;
 
     @CreateDateColumn({ type: 'timestamp' , name: 'created_at'})

@@ -2,8 +2,9 @@ import {Controller, Get, Post, Body, Param, Query, Patch} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { SupplyService } from './supply.service';
-import {SupplyRequestDto, SupplyResponseDto} from "./supply.dto";
+import {RentRequestDto, SupplyRequestDto, SupplyResponseDto} from "./supply.dto";
 import { Supply } from "./supply.entity";
+import {Rent} from "./rent.entity";
 
 @ApiTags("비품 API")
 @Controller('supplies')  // URL 경로 접두사
@@ -62,6 +63,14 @@ export class SupplyController {
         @Body() supplyRequestDto: SupplyRequestDto
     ){
         return this.supplyService.updateSupply(id, supplyRequestDto);
+    }
+
+    // 특정 비품 대여
+    @Post('rent')
+    async rentSupply(
+        @Body() rentRequestDto: RentRequestDto
+    ):Promise<Rent>{
+        return this.supplyService.rentSupply(rentRequestDto);
     }
 
 }

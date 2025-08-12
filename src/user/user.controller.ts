@@ -19,9 +19,4 @@ export class UserController {
         return this.userService.addUser(userRequestDto);
     }
 
-    @Get()
-    check() {
-        return 'check';
-    }
-
 }

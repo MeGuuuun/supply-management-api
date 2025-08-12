@@ -23,7 +23,7 @@ INSERT INTO category VALUES (uuid_generate_v4(), '전자기기');
 CREATE table if not exists supply (
     supply_id UUID primary key DEFAULT uuid_generate_v4(),
     name varchar,
-    quantity int,
+    quantity integer,
     status varchar DEFAULT '사용 가능',
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     category_id UUID,
@@ -41,3 +41,12 @@ VALUES (uuid_generate_v4(), '키보드', 5, (SELECT category_id FROM category WH
 
 INSERT INTO supply (supply_id, name, quantity, category_id)
 VALUES (uuid_generate_v4(), '노트북', 10, (SELECT category_id FROM category WHERE name='전자기기' LIMIT 1));
+
+CREATE table if not exists rent (
+    rent_id UUID primary key DEFAULT uuid_generate_v4(),
+    member_id UUID,
+    supply_id UUID,
+    quantoty integer,
+    status varchar,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP
+)
