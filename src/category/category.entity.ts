@@ -11,8 +11,4 @@ export class Category {
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
-
-    // 하나의 카테고리에 여러개의 비품
-    @OneToMany(()=> Supply, (supply) => supply.category)
-    supply: Supply;
 }

@@ -14,6 +14,7 @@ export class SupplyRequestDto {
     quantity: number;
 
     @ApiProperty({ example: 'uid', description: '카테고리 id'})
+    @IsNotEmpty()
     category_id: string;
 }
 
@@ -56,11 +57,4 @@ export class RentRequestDto {
     @IsNumber()
     @Min(1)
     quantity: number;
-
-    @ApiProperty({ example: "대여 중", description: '대여할 비품의 상태'})
-    status:string;
-}
-
-export class RentResponseDto {
-
 }

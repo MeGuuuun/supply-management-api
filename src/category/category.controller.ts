@@ -33,9 +33,9 @@ export class CategoryController {
     // 카테고리 갱신
     @ApiParam({ name: 'categoryId', description: '갱신할 카테고리 ID' })
     @ApiOperation({ summary: '카테고리 갱신' })
-    @Patch(':categoryId')
+    @Patch()
     async updateCategory(
-        @Param('categoryId') id: string,
+        @Query('categoryId') id: string,
         @Body() categoryRequestDto: CategoryRequestDto
     ){
         return this.categoryService.updateCategory(id, categoryRequestDto);
@@ -44,8 +44,8 @@ export class CategoryController {
     // 카테고리 삭제
     @ApiParam({ name: 'categoryId', description: '삭제할 카테고리 ID' })
     @ApiOperation({ summary: '카테고리 삭제' })
-    @Delete(':categoryId')
-    async deleteCategory(@Param('categoryId') id: string){
+    @Delete()
+    async deleteCategory(@Query('categoryId') id: string){
         return this.categoryService.deleteCategory(id);
     }
 

@@ -26,7 +26,9 @@ export class SupplyService {
 
     // 새 비품 등록
     async addSupply(supplyRequestDto: SupplyRequestDto): Promise<Supply> {
-        const newSupply = this.supplyRepository.create(supplyRequestDto); // 엔티티 인스턴스 생성
+        const newSupply = this.supplyRepository.create(supplyRequestDto);// 엔티티 인스턴스 생성
+
+        newSupply.status = SupplyStatus.AVAILABLE;
 
         return await this.supplyRepository.save(newSupply); // DB에 저장
     }
@@ -80,11 +82,8 @@ export class SupplyService {
         try {
             const [supplies, total ] = await this.supplyRepository.findAndCount({
                 where: {
-                    category: {
-                        category_id: id
-                    }
+                    category_id:id
                 },
-                relations: ['category'],
                 skip: (page -1 ) * limit,
                 take: limit
             });
@@ -166,12 +165,13 @@ export class SupplyService {
 
             // 비품 개수 차감 및 상태 변경
             supply.quantity -= rentRequestDto.quantity;
-            rentRequestDto.status = SupplyStatus.RENTED;
 
             await this.supplyRepository.save(supply);
 
             // 대여 기록 저장
             const rent = this.rentRepository.create(rentRequestDto);
+            rent.status = SupplyStatus.RENTED
+
             return await this.rentRepository.save(rent);
         }catch(error){
             console.error("InternalServerErrorException 발생")

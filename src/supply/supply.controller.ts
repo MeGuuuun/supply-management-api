@@ -35,9 +35,9 @@ export class SupplyController {
     @ApiQuery({ name: 'page', description: '페이지 번호' })
     @ApiQuery({ name: 'limit', description: '한 페이지에 보여줄 항목 수' })
     @ApiOperation({ summary: '특정 카테고리에 속한 비품 조회' })
-    @Get('/by-category/:categoryId')
+    @Get('/by-category')
     async getSuppliesByCategory(
-        @Param('categoryId') id: string,
+        @Query('categoryId') id: string,
         @Query('page') page = 1,
         @Query('limit') limit = 10
     ) {
@@ -47,9 +47,9 @@ export class SupplyController {
     // 특정 비품 상세 조회
     @ApiParam({name: 'supplyId', description:'비품 id'})
     @ApiOperation({summary: '특정 비품 상세 조회'})
-    @Get(':supplyId')
+    @Get('/details')
     async getSupplyInfo(
-        @Param('supplyId') id: string
+        @Query('supplyId') id: string
     ) {
         return this.supplyService.getSupplyInfo(id);
     }
@@ -57,9 +57,9 @@ export class SupplyController {
     // 특정 비품 정보 수정
     @ApiParam({name: 'supplyId', description:'비품 id'})
     @ApiOperation({summary: '특정 비품 정보 수정'})
-    @Patch(':supplyId')
+    @Patch()
     async updateSupply(
-        @Param('supplyId') id:string,
+        @Query('supplyId') id:string,
         @Body() supplyRequestDto: SupplyRequestDto
     ){
         return this.supplyService.updateSupply(id, supplyRequestDto);
@@ -76,7 +76,7 @@ export class SupplyController {
     // 특정 비품 반납
     @Post('/return')
     async returnSupply(
-        @Param('rentId') id:string
+        @Query('rentId') id:string
     ){
         return this.supplyService.returnSupply(id);
     }
@@ -86,7 +86,7 @@ export class SupplyController {
     async getRentHistory(
         @Query('page') page = 1,
         @Query('limit') limit = 10,
-        @Param('supplyId') id:string
+        @Query('supplyId') id:string
     ){
         return this.supplyService.getRentHistory({page, limit}, id)
     }

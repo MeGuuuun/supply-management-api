@@ -4,12 +4,17 @@ import { Repository } from 'typeorm';
 import { Category } from "./category.entity";
 import { CategoryRequestDto } from "./category.dto";
 import { CategoryResponseDto } from "./category.dto";
+import {Supply} from "../supply/supply.entity";
+import {SupplyStatus} from "../supply/supply-status.constants";
 
 @Injectable()
 export class CategoryService {
     constructor(
         @InjectRepository(Category)
         private readonly categoryRepository: Repository<Category>,
+
+        @InjectRepository(Supply)
+        private readonly supplyRepository: Repository<Supply>,
     ) {}
 
     // 새 카테고리 등록
@@ -69,10 +74,48 @@ export class CategoryService {
     }
 
     // 카테고리 삭제
-    async deleteCategory(id: string): Promise<boolean> {
-        const result = await this.categoryRepository.delete({category_id:id});
-        // affected : 필드가 삭제된 레코드 수
-        return result.affected > 0 // 삭제된 행이 1개 이상이면 true, 없다면 false
+    async deleteCategory(id: string): Promise<string> {
+        console.log(id);
+        try {
+            const deleteCategory = await this.categoryRepository.findOne({
+                where: {
+                    name: '삭제'
+                }
+            });
+
+            console.log(id);
+
+            if(!deleteCategory){
+                throw new NotFoundException('삭제 카테고리를 찾지 못 했습니다.');
+            }
+
+            const targetCategory = await this.categoryRepository.findOne({
+                where : {
+                    category_id: id
+                }
+            });
+
+            console.log('삭제 카테고리:', JSON.stringify(deleteCategory));
+            console.log('타겟 카테고리:', JSON.stringify(targetCategory));
+
+            if(!targetCategory){
+                throw new NotFoundException('삭제하려는 카테고리가 존재하지 않습니다.');
+            }
+
+            await this.supplyRepository
+                .createQueryBuilder()
+                .update(Supply)
+                .set({ category_id: deleteCategory.category_id, status: SupplyStatus.DISPOSED })
+                .where("category_id = :id", { id: id })
+                .execute();
+
+            await this.categoryRepository.delete({ category_id: id });
+
+            return '카테고리 삭제 완료';
+        }catch(error){
+            console.log(error);
+            throw new InternalServerErrorException('카테고리 삭제에 에러가 발생했습니다.');
+        }
     }
 
 }
