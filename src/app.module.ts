@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { SupplyModule } from "./supply/supply.module";
-import { CategoryModule } from "./category/category.module";
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {AppService} from "./app.service";
-
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as redisStore from 'cache-manager-ioredis';
 import { CacheModule } from '@nestjs/cache-manager';
+
+import { CategoryModule } from "./category/category.module";
+import { SupplyModule } from "./supply/supply.module";
+import { UserModule} from "./user/user.module";
 
 @Module({
   imports: [
@@ -16,12 +17,14 @@ import { CacheModule } from '@nestjs/cache-manager';
           cache: true
       }),
       CacheModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
           isGlobal: true,
-          useFactory: async () => ({
+          useFactory: async (config: ConfigService) => ({
               store: redisStore as any,
-              host: 'redis',
-              port: 6379,
-              ttl: 60000
+              host: config.get('REDIS_HOST'),
+              port: config.get<number>('REDIS_PORT'),
+              ttl: config.get<number>('REDIS_TTL')
           })
       }),
       TypeOrmModule.forRootAsync({
@@ -38,6 +41,7 @@ import { CacheModule } from '@nestjs/cache-manager';
               synchronize: false,
           }),
       }),
+      UserModule,
       SupplyModule,
       CategoryModule,
   ],
