@@ -19,8 +19,9 @@ CREATE table if not exists category (
 );
 
 INSERT INTO category VALUES
-('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '사무용품'),
-('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '전자기기');
+('00000000-0000-0000-0000-000000000000', '삭제'),
+('12000000-0000-0000-1111-000000000001', '사무용품'),
+('12000000-0000-0000-1111-000000000002', '전자기기');
 
 CREATE table if not exists supply (
     supply_id UUID primary key DEFAULT uuid_generate_v4(),
@@ -28,15 +29,14 @@ CREATE table if not exists supply (
     quantity integer,
     status varchar DEFAULT '사용 가능',
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    category_id UUID,
-    Foreign Key (category_id) references category(category_id)
+    category_id UUID
 );
 
 INSERT INTO supply (supply_id, name, quantity, category_id) VALUES
-('00000001-0000-0000-0000-000000000001', '연필', 10, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
-('00000001-0000-0000-0000-000000000002', '공책', 25, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
-('00000001-0000-0000-0000-000000000003', '키보드', 5, 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
-('00000001-0000-0000-0000-000000000004', '노트북', 10, 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');
+('00000001-0000-0000-0000-000000000001', '연필', 10, '12000000-0000-0000-1111-000000000001'),
+('00000001-0000-0000-0000-000000000002', '공책', 25, '12000000-0000-0000-1111-000000000001'),
+('00000001-0000-0000-0000-000000000003', '키보드', 5, '12000000-0000-0000-1111-000000000002'),
+('00000001-0000-0000-0000-000000000004', '노트북', 10, '12000000-0000-0000-1111-000000000002');
 
 CREATE table if not exists rent (
     rent_id UUID primary key DEFAULT uuid_generate_v4(),
